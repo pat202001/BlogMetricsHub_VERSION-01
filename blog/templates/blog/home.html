@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+  {% load static %}
+{% block content %}
+<h1>Blog Home</h1>
+  <hr>
+  {% for posts in posts %}
+          <article class="media content-section  row mt-5 pt-3">
+            
+            <img class=" rounded-circle article-img " src="{{ posts.author.profile.image.url }}" alt=""> 
+              <div class="media-body">
+                  <div class="article-metadata">
+                  <a class="mr-2" href="#">{{posts.author}}</a>
+                  <small class="text-muted">{{posts.date_posted}}</small>
+              </div>
+              <h2><a class="article-title" href="{% url 'blog-detail' posts.id  %}">{{posts.title}}</a></h2> 
+
+              <p class="article-content">{{ posts.content|truncatewords:30 }}</p>
+          </div>
+          </article>
+  {% endfor  %}
+{% endblock content %}
