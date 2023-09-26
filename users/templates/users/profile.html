@@ -13,7 +13,7 @@
       <h1 id="profile-h1">{{user.username|title}}</h1>
       <p class="title">{{user.email}}</p>
 
-      <p>My Social Live  Below</p>
+      <p class=" text-white">My Social Live  Below</p>
 
       <a href="#" id="auth-links"><i class="fa fa-dribbble"></i></a>
       <a href="#" id="auth-links"><i class="fa fa-twitter"></i></a>
@@ -22,12 +22,11 @@
 
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-    <!--            <div class="form-group">-->
-    <!--            <button class="btn btn-outline-info" type="submit">Update Profile</button>-->
-    <!--            </div>-->
+               <!-- <div class="form-group">
+                 <button class="btn btn-outline-info" type="submit"> <a href="{% url 'profile-update' %}">Update Profile</a></button>
+               </div> -->
         </form>
       <p><button id="btn-profile"><a href="{% url 'profile-update' %}" id="auth-links">
-        <span></span>
         <span></span>
         <span></span>
         <span></span>
