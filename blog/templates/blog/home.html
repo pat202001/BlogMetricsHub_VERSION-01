@@ -1,21 +1,54 @@
-{% extends 'blog/base.html' %}
-  {% load static %}
-{% block content %}
-<h1>Blog Home</h1>
-  <hr>
-  {% for posts in posts %}
-          <article class="media content-section  row mt-5 pt-3">
-            
-            <img class=" rounded-circle article-img " src="{{ posts.author.profile.image.url }}" alt=""> 
-              <div class="media-body">
-                  <div class="article-metadata">
-                  <a class="mr-2" href="#">{{posts.author}}</a>
-                  <small class="text-muted">{{posts.date_posted}}</small>
-              </div>
-              <h2><a class="article-title" href="{% url 'blog-detail' posts.id  %}">{{posts.title}}</a></h2> 
 
-              <p class="article-content">{{ posts.content|truncatewords:30 }}</p>
-          </div>
-          </article>
-  {% endfor  %}
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>Blog Home</h1>
+  <hr>
+  {% for post in posts %}
+    <article class="media content-section row mt-5 pt-3">
+      <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}" alt="">
+      <div class="media-body">
+        <div class="article-metadata">
+          <strong><a class="mr-2" href="#">{{ post.author }}</a></strong>
+          <strong>--</strong>
+          {% for category in post.category.all %} 
+            <strong><a href="{% url 'category-list' category.id %}">{{ category.name }} </a></strong>
+          {% empty %}
+            <strong><a class="mr-2 text-primary" href="#">Uncategorized</a></strong>
+          {% endfor %} 
+          <strong>--</strong>
+          <small class="text-dark"><strong>{{ post.date_posted }}</strong></small>
+        </div>
+        <h2><a class="article-title" href="{% url 'blog-detail' post.id %}">{{ post.title }}</a></h2>
+        <p class="article-content">{{ post.content|truncatewords:30|safe }}</p>
+      </div>
+    </article>
+  {% endfor %}
+  
+  {% for post in page_obj %}
+    {# Each "post" is a post model object. #}
+    {{ post.full_name|upper }}<br>
+  
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>&nbsp;
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>&nbsp;
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.&nbsp;
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>&nbsp;&nbsp;
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
 {% endblock content %}
+

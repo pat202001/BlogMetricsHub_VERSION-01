@@ -1,0 +1,40 @@
+
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+  {% load static %}
+  {%  block title  %}  Blog Categories  {% endblock%}
+{% block content %}
+<div class="cover">
+  <div class="container">
+    
+      <div class="row mt-5 pt-5">
+      
+          <div class="col-md-6 offset-md-1">
+            <div class="text-center my-3">
+              <button  class="btn btn-primary btn-sm p-2 " type="submit" ><a class="text-white text-decoration-none" href="{% url 'add_category' %}"><strong>ADD CATEGORY</strong></a></button>
+            </div>
+              <div class="card my-3 shadow">
+                  <div class="card-body">
+                  
+                      <h4> All Blog Categories  Here </h4>
+                      <hr>
+
+                        <ul>
+                            {% for post in posts %}
+                                <li><a href="{% url 'blog-detail' post.id %}">{{ post.title }}</a></li>
+                            {% empty %}
+                                <li>No posts in this category.</li>
+                            {% endfor %}
+                        </ul>
+                      <hr>
+                  </div>
+              </div>
+             
+          </div>
+
+      </div>
+  </div>
+</div>
+<a class="d-flex justify-content-start text-decoration-none"href="{% url 'category-list' %}" >Go Back  </a>
+{% endblock content %}
+

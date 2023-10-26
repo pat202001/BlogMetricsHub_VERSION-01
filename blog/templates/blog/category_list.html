@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+  {% load static %}
+  {%  block title  %}  create New Blog Categories  {% endblock%}
+{% block content %}
+<div class="cover">
+  <div class="container">
+    
+      <div class="row mt-5 pt-5">
+      
+          <div class="col-md-6 offset-md-1">
+            <div class="text-center my-3">
+              <button  class="btn btn-primary btn-sm p-2 " type="submit" ><a class="text-white text-decoration-none" href="{% url 'add_category' %}"><strong>ADD CATEGORY</strong></a></button>
+            </div>
+              <div class="card my-3 shadow">
+                  <div class="card-body">
+                  
+                      <h4>  Find all Blog Categories  Here </h4>
+                      <hr>
+
+                      <ul>
+                        {% for category in categories %}
+                            <li><a href="{% url 'view_category_posts' category.id %}">{{ category.name }}</a></li>
+                        {% empty %}
+                            <li>No categories available</li>
+                        {% endfor %}
+                    </ul>
+                      <hr>
+                  </div>
+              </div>
+             
+          </div>
+
+      </div>
+  </div>
+</div>
+<a class="d-flex justify-content-start text-decoration-none"href="{% url 'blog-home' %}" >Go Back  </a>
+{% endblock content %}

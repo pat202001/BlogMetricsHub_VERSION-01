@@ -3,6 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm, ProfileUpdateForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
+from .models import Profile
+#  resseting passwprd 
+from django.contrib.auth.tokens import default_token_generator
 
 def register(request):
     if request.method == "POST":
@@ -22,6 +25,12 @@ def profile(request):
 
 @login_required
 def profile_update(request):
+    user = request.user
+    try:
+        profile = Profile.objects.get(user=user)
+    except Profile.DoesNotExist:
+        profile = None
+    
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
@@ -43,3 +52,33 @@ def profile_update(request):
         "p_form": p_form
     }
     return render(request, 'users/profile_update.html', context)
+
+#  forgeting and reseting   password 
+
+def generate_reset_token(user):
+    return default_token_generator.make_token(user)
+
+
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+
+User = get_user_model()
+
+def reset_password(request):
+    if request.method == 'POST':
+        token = request.POST.get('token')
+        password = request.POST.get('password')
+
+        user = get_object_or_404(User, email=request.POST.get('email'))
+        
+        if default_token_generator.check_token(user, token):
+            user.set_password(password)
+            user.save()
+            return JsonResponse({'message': 'Password reset successfully'}, status=200)
+        else:
+            return JsonResponse({'message': 'Invalid token'}, status=400)
+    else:
+        return JsonResponse({'message': 'Invalid request method'}, status=400)
+

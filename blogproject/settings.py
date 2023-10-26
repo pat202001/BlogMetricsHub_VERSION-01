@@ -12,6 +12,21 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+# from dotenv import load_dotenv
+
+# load_dotenv()
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST')
+# EMAIL_PORT = int(os.getenv('DJANGO_EMAIL_PORT', 587))
+# EMAIL_USE_TLS = os.getenv('DJANGO_EMAIL_USE_TLS', 'True')
+# if EMAIL_USE_TLS.lower() == 'true':
+#     EMAIL_USE_TLS = True
+# else:
+#     EMAIL_USE_TLS = False
+# EMAIL_HOST_USER = str(os.getenv('DJANGO_EMAIL_HOST_USER'))
+# EMAIL_HOST_PASSWORD = str(os.getenv('DJANGO_EMAIL_HOST_PASSWORD'))
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +58,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
+    'ckeditor',
+    # 'Comment',
 
 
 ]
@@ -83,7 +100,7 @@ WSGI_APPLICATION = 'blogproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR /'db.sqlite3',
     }
 }
 
@@ -140,9 +157,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #  sending  email for  resttting  password 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'jeaniyonzima2016@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_FILE_PATH = BASE_DIR / "emails"
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'jeaniyonzima2016@gmail.com'
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
  

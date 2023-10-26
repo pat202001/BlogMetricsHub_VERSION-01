@@ -1,63 +1,134 @@
 {% extends 'blog/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<br><br><br><br><br>
-       <div class="post_content">
-        <article class="media content-section ">
+
+    <div class="post_content mt-5 pt-5">
+      <article class="media content-section">
+        <img
+          class="rounded-cirlce article-img"
+          src="{{ object.author.profile.image.url }}"
+          alt=""
+        />
+        <div class="media-body">
+          <div class="article-metadata">
+             <strong><a class="mr-2" href="#">{{ object.author }}</a></strong>
+             <strong>-</strong>
+            {% for category in post.category.all %}
+            <strong><a class="mr-2 text-primary" href="#">{{ category.name }}</a></strong>
+          {% empty %}
+            <strong><a class="mr-2 text-primary" href="#">Uncategorized</a></strong>
+          {% endfor %}
+          <strong>-</strong>
+            <!-- <a class="mr-2" href="#">{{ object.author }}</a>
+            <strong>-<a class="mr-2 text-primary" href="#">{{ object.category}}</a>-</strong> -->
+            <small class="text-black"><strong> {{ object.date_posted }}</strong></small>
+            <br><br>
+            {% if object.author == user %}
           
-          <img class="rounded-cirlce article-img" src="{{ object.author.profile.image.url }}" alt="">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ object.author }}</a>
-              <small class="text-muted ">{{ object.date_posted }}</small>
-                {% if object.author == user %}
+            <div>
 
-                  <div>
-                      <a class="btn btn-outline-success" href="{% url 'blog-update' object.id %}">Update</a>
-                      <a class="btn btn-outline-danger" href="{% url 'blog-delete' object.id %}">Delete</a>
-                  </div>
-                {% endif %}
+              <a
+                class="btn btn-outline-success btn-sm "
+                href="{% url 'blog-update' object.id %}"
+                >Update</a
+              >
+              <a
+                class="btn btn-outline-danger btn-sm ml-2"
+                href="{% url 'blog-delete' object.id %}"
+                >Delete</a
+              >
             </div>
-           
-            <h2><a class="article-title" href="#">{{ object.title }}</a></h2>
-            <p class="article-content">{{ object.content }}</p>
+            {% endif %}
           </div>
-          <br>
-         
-        </article>
-       </div>
-       <!-- comments  -->
-       <p class="mt-3">
-        <a class=" " data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-            aria-controls="collapseExample">
-            Comments: {{ post.comment_count }}
-        </a>
-    </p>
-    <!-- comment Form  -->
-    <div class="collapse" id="collapseExample">
-        <div style="height: 250px; overflow-y: scroll;" class="card card-body">
-            {% for comment in post.comments %}
-            <p class="text-justify">
-            <div class="row">
-                <div class="col-md-3">
-                    {{ comment.user.username }}
-                </div>
-                <div class="col-md-9">
-                    {{ comment.content }}
-                </div>
-              </div>
-             <!-- <hr> -->
-            </p>
-            {% endfor %}
-        </div>
-    </div>
-    <form method="POST">
-        {% csrf_token %}
-        {{c_form|crispy}}
-<!-- <input class=" "  type="textfield" name="comment"  placeholder=" Add  Your comment here...." > -->
-    <br>
-    <br>
-    <input class="btn btn-primary btn-sm" type="submit" value="Comment">
-    </form>
 
+          <h2><a class="article-title" href="#">{{ object.title }}</a></h2>
+          {% if post.image_handler %}
+           <img class="post-imag" src="{{ post.image_handler.url }}" alt="{{ post.title }}">
+          {% endif %}
+            <br>
+            <br>
+          <p class="article-content">{{ object.content|safe }}</p>
+        </div>
+        <br />
+      </article>
+    </div>
+    <!-- comments  -->
+    <div class="d-flex flex-row" >
+      <div>
+        <p class="mt-3">
+          <a
+            class=" "
+            data-toggle="collapse"
+            href="#collapseExample"
+            role="button"
+            aria-expanded="false"
+            aria-controls="collapseExample"
+          >
+            {{ post.comments.all.count }}&nbsp; Comments    
+          
+          </a> 
+          </p>
+      </div>
+      
+      <div class=" text-primary mt-3  m-3" >
+      <strong class="text-secondary">{{ number_of_likes }} Like{{ number_of_likes|pluralize }}</strong>
+      </div>
+    </div>
+<!--  comment start here -->
+<div class="collapse" id="collapseExample">
+  <div style="height: 250px; overflow-y: scroll" class="card card-body">
+    {% for comment in post.comments.all %} 
+      <div class="row">
+          <div class="col-md-3">
+            {% if comment.user %}
+            <strong>{{ comment.user.username }}{{comment.date_added }}</strong>  
+            {% elif comment.user_name %}
+            <strong>{{ comment.user_name }}</strong>
+        {% else %}
+            Guest
+        {% endif %}
+          </div>
+          <div class="col-md-9">
+              {{ comment.content }}
+          </div>
+        </div>
+       <hr>
+      {% endfor %}
+  </div>
+</div>
+
+<!-- Comment Form -->
+    <div class=" d-flex flex-row">
+      <form style="float:left" method="POST" action="{% url 'comment_post' post.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {% if not request.user.is_authenticated %}
+            <br>
+            <input type="text" name="user_name" required placeholder="Your Name"><br>
+        {% endif %}
+        <br>
+        <textarea class="form-control expanded-textarea" name="content" required placeholder="Leave Your comment Here" rows="4"></textarea><br>
+        <button class="btn btn-primary btn-sm p-2" type="submit">Comment</button>
+    </form>
+  </div>
+  <br>
+    <!-- like and unlike  -->
+    <div class ="d-flex flex-row"> 
+{% if user.is_authenticated %}
+<form style="float: left;"   action="{% url 'blogpost_like' object.id %}" method="POST">
+  {% csrf_token %}
+
+  {% if post_is_liked %}
+  <button type="submit" name="post_id" value="{{object.id}}"class="btn btn-primary btn-sm p-2">Unlike</button>
+  {% else %}
+  <button type="submit" name="post_id" value="{{object.id}}" class="btn btn-primary btn-sm p-2" >Like</button>
+  {% endif %}
+</form>
+{% else %}
+<a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this article!</a><br>
+{% endif %}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a class="d-flex justify-content-end text-decoration-none"href="{% url 'blog-home' %}" >Go Back  </a>
+</div>
 {% endblock content %}
