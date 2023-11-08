@@ -98,23 +98,23 @@ WSGI_APPLICATION = 'blogproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR /'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': '4651eg4AEDE6G26gD15DbfcGC1G*cCba',
-        'HOST': 'monorail.proxy.rlwy.net',
-        'PORT': '47364',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR /'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': '4651eg4AEDE6G26gD15DbfcGC1G*cCba',
+#         'HOST': 'monorail.proxy.rlwy.net',
+#         'PORT': '47364',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
