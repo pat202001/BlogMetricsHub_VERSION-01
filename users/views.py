@@ -21,7 +21,7 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request, 'users/profile.html')
+    return render(request,'users/profile.html')
 
 @login_required
 def profile_update(request):
@@ -29,7 +29,7 @@ def profile_update(request):
     try:
         profile, created = Profile.objects.get_or_create(user=user)
         if created:
-            profile.profile_picture = 'default.jpg'  # Set the default profile picture path
+            profile.profile_picture ='default.jpg'  # Set the default profile picture path
             profile.save()
         # profile = Profile.objects.get(user=user)
     except Profile.DoesNotExist:
