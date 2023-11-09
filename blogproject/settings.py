@@ -41,7 +41,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY=os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =os.environ.get("DEBG","False").lower() == "true"
+DEBUG =os.environ.get("DEBUG","False").lower() == "true"
 
 # ALLOWED_HOSTS = ['.vercel.app','now.sh','127.0.0.1','localhost']
 # ALLOWED_HOSTS = ['*'] # or use specific host name
