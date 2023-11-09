@@ -45,7 +45,9 @@ DEBUG =os.environ.get("DEBUG","False").lower() == "true"
 
 # ALLOWED_HOSTS = ['.vercel.app','now.sh','127.0.0.1','localhost']
 # ALLOWED_HOSTS = ['*'] # or use specific host name
-ALLOWED_HOSTS=os.environ.get("ALLOWED_HOSTS").split("")
+# ALLOWED_HOSTS=os.environ.get("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+
 
 
 
