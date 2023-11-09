@@ -112,7 +112,7 @@ DATABASES= {
 
 import os
 import dj_database_url
-DATABASES['default'] = dj_database_url.config(default=os.environ.get('DATABASE_URL', 'sqlite://localhost/db.sqlite3'))
+DATABASES["default"] = dj_database_url.config(default=os.environ.get('DATABASE_URL', 'sqlite://localhost/db.sqlite3'))
 
 
 # database_url=os.environ.get("DATABASE_URL")
