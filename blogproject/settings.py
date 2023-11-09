@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 import os
 # from dotenv import load_dotenv
@@ -29,20 +29,24 @@ import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&gy^c3fwu(wy_kuy_(vdkb0jl*#4525=fe38rfisj()a_m3e4*'
+# SECRET_KEY = 'django-insecure-&gy^c3fwu(wy_kuy_(vdkb0jl*#4525=fe38rfisj()a_m3e4*'
+SECRET_KEY=os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =True
+DEBUG =os.environ.get("DEBG","False").lower() == "true"
 
 # ALLOWED_HOSTS = ['.vercel.app','now.sh','127.0.0.1','localhost']
-ALLOWED_HOSTS = ['*'] # or use specific host name
+# ALLOWED_HOSTS = ['*'] # or use specific host name
+ALLOWED_HOSTS=os.environ.get("ALLOWED_HOSTS").split("")
+
 
 
 # Application definition
@@ -98,13 +102,15 @@ WSGI_APPLICATION = 'blogproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
+DATABASES= {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR /'db.sqlite3',
+        # 'NAME': BASE_DIR /'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+database_url=os.environ.get("DATABASE_URL")
+DATABASES['defalut']= dj_database_url.parse("database_url")
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -171,12 +177,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #  sending  email for  resttting  password 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_FILE_PATH = BASE_DIR / "emails"
-# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_FILE_PATH = BASE_DIR / "emails"
+EMAIL_FILE_PATH=os.path.join(BASE_DIR, "emails"),
+# EMAIL_HOST = 'smtp.gmail.com' 
 # EMAIL_HOST_USER = 'jeaniyonzima2016@gmail.com'
 # EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
- 
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    # Add other paths to your static files directories if needed
+]
+# STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
