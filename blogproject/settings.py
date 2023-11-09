@@ -37,17 +37,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-&gy^c3fwu(wy_kuy_(vdkb0jl*#4525=fe38rfisj()a_m3e4*'
-SECRET_KEY=os.environ.get("SECRET_KEY")
+SECRET_KEY = 'django-insecure-&gy^c3fwu(wy_kuy_(vdkb0jl*#4525=fe38rfisj()a_m3e4*'
+# SECRET_KEY=os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =os.environ.get("DEBUG","False").lower() == "true"
 
 # ALLOWED_HOSTS = ['.vercel.app','now.sh','127.0.0.1','localhost']
-# ALLOWED_HOSTS = ['*'] # or use specific host name
-# ALLOWED_HOSTS=os.environ.get("ALLOWED_HOSTS").split(" ")
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
-
+ALLOWED_HOSTS = ['*'] # or use specific host name
+# ALLOWED_HOSTS=os.environ.get("ALLOWED_HOSTS").split(" ,")
 
 
 
@@ -111,8 +109,14 @@ DATABASES= {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-database_url=os.environ.get("DATABASE_URL")
-DATABASES['defalut']= dj_database_url.parse("database_url")
+
+import os
+import dj_database_url
+DATABASES['default'] = dj_database_url.config(default=os.environ.get('DATABASE_URL', 'sqlite://localhost/db.sqlite3'))
+
+
+# database_url=os.environ.get("DATABASE_URL")
+# DATABASES['defalut']= dj_database_url.parse("database_url")
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
