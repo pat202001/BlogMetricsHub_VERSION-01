@@ -27,7 +27,11 @@ def profile(request):
 def profile_update(request):
     user = request.user
     try:
-        profile = Profile.objects.get(user=user)
+        profile, created = Profile.objects.get_or_create(user=user)
+        if created:
+            profile.profile_picture = 'default.jpg'  # Set the default profile picture path
+            profile.save()
+        # profile = Profile.objects.get(user=user)
     except Profile.DoesNotExist:
         profile = None
     
@@ -81,4 +85,5 @@ def reset_password(request):
             return JsonResponse({'message': 'Invalid token'}, status=400)
     else:
         return JsonResponse({'message': 'Invalid request method'}, status=400)
+        
 
